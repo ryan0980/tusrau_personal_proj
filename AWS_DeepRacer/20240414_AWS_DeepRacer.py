@@ -32,7 +32,7 @@ def reward_function(params):
         reward = 1e-3
         return float(reward)#return 1e-3 if all_wheels_on_track is False
     
-    reward = 1.0#init reward
+    reward = 5.0#init reward
 
     outer_radius = track_width / 2.0
     mid_radius = track_width / 4.0
@@ -40,35 +40,42 @@ def reward_function(params):
 
     if distance_from_center <= inner_radius:
         reward += 2.0  # Closest to the center gets the highest reward
+        if speed>2:
+            reward += 1.5
+        else:
+            reward += 0.9
     elif distance_from_center <= mid_radius:
         reward += 1.3  # Middle tier distance gets a medium reward
+        if speed>2:
+            reward += 1.0
+        else:
+            reward += 0.6
     elif distance_from_center <= outer_radius:
-        reward += 0.5  # Outer tier distance gets a lower reward
-    
-    if -7<steering_angle<7:
+        reward += 1.2  # Outer tier distance gets a lower reward
+    '''
+    if -10<steering_angle<10:
         if speed>2:
-            reward += 1.8
+            reward += 2.0
         else:
-            reward += 1.3
-    elif -17>steering_angle or 17<steering_angle:
+            reward += 1.2
+    elif -20>steering_angle or 20<steering_angle:
         if speed>2:
-            reward += 0.7
+            reward += 1.0
         else:
-            reward += 1.3
+            reward += 1.1
     else:
         if speed>2:
-            reward += 0.3
+            reward += 0.6
         else:
-            reward += 0.7
-
+            reward += 0.4
+    '''
 
 
     if steps>0:
         progress_ratio=progress/100
         effieciency=progress_ratio/steps
-        step_reward=effieciency*150
+        step_reward=effieciency*30
         reward+=step_reward
     
 
     return float(reward)
-            
