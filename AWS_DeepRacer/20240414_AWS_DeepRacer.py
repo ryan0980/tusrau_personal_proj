@@ -1,62 +1,51 @@
 def reward_function(params):
-    #############################################################################
-
-
     all_wheels_on_track = params['all_wheels_on_track']
-    x = params['x']
-    y = params['y']
-    closest_objects = params['closest_objects']
-    closest_waypoints = params['closest_waypoints']
     distance_from_center = params['distance_from_center']
     is_crashed = params['is_crashed']
-    is_left_of_center = params['is_left_of_center']
-    is_offtrack = params['is_offtrack']
-    is_reversed = params['is_reversed']
-    heading = params['heading']
-    objects_distance = params['objects_distance']
-    objects_heading = params['objects_heading']
-    objects_left_of_center = params['objects_left_of_center']
-    objects_location = params['objects_location']
-    objects_speed = params['objects_speed']
-    progress = params['progress']
     speed = params['speed']
-    steering_angle = params['steering_angle']
     steps = params['steps']
-    track_length = params['track_length']
+    progress = params['progress']
+    steering_angle = params['steering_angle']
     track_width = params['track_width']
-    waypoints = params['waypoints']
-
-    
 
     if not all_wheels_on_track or is_crashed:
         reward = 1e-3
-        return float(reward)#return 1e-3 if all_wheels_on_track is False
-    
-    reward = 5.0#init reward
+        return float(reward)
+
+    reward = 5.0  # 初始奖励
 
     outer_radius = track_width / 2.0
     mid_radius = track_width / 4.0
     inner_radius = track_width / 8.0
 
+    # 距离中心的奖励，结合速度增加奖励
     if distance_from_center <= inner_radius:
-        reward += 2.0  # Closest to the center gets the highest reward
-        if speed>2:
-            reward += 1.5
-        else:
-            reward += 0.9
+        reward += 2.0  # 最接近中心的最高奖励
+        reward += 2.0 if speed > 3 else 0.9  # 高速增加奖励
     elif distance_from_center <= mid_radius:
-        reward += 1.3  # Middle tier distance gets a medium reward
-        if speed>2:
-            reward += 1.0
-        else:
-            reward += 0.6
+        reward += 1.3
+        reward += 1.5 if speed > 3 else 0.6
     elif distance_from_center <= outer_radius:
-        reward += 1.2  # Outer tier distance gets a lower reward
+        reward += 1.2
+        reward += 1.0 if speed > 3 else 0.3  # 在外圈高速时的额外奖励
 
-    if speed>2:
-        reward += 2.0
+    if abs(steering_angle) > 20:
+        if speed > 3:
+            return -1.0  # 在大角度转向时高速行驶，大幅度减少奖励
+        else:
+            return 0.5   # 在大角度转向时低速行驶，适当增加奖励
     else:
-        reward += 1e-3
+        if speed > 3.5:
+            return 2.0  # 最高速度区间，给予最高奖励
+        elif speed > 3.0:
+            return 1.5
+        elif speed > 2.5:
+            return 1.0
+        elif speed > 2.0:
+            return 0.5
+        else:
+            return 0.1
+
     '''
     if -10<steering_angle<10:
         if speed>2:
@@ -75,12 +64,11 @@ def reward_function(params):
             reward += 0.4
     '''
 
-
-    if steps>0:
-        progress_ratio=progress/100
-        effieciency=progress_ratio/steps
-        step_reward=effieciency*30
-        reward+=step_reward
-    
+    # 基于进度和步数的效率奖励
+    if steps > 0:
+        progress_ratio = progress / 100
+        efficiency = progress_ratio / steps
+        step_reward = efficiency * 30
+        reward += step_reward
 
     return float(reward)
