@@ -41,7 +41,7 @@ def reward_function(params):
     if distance_from_center <= inner_radius:
         reward += 2.0  # Closest to the center gets the highest reward
     elif distance_from_center <= mid_radius:
-        reward += 0.8  # Middle tier distance gets a medium reward
+        reward += 1.3  # Middle tier distance gets a medium reward
     elif distance_from_center <= outer_radius:
         reward += 0.1  # Outer tier distance gets a lower reward
     
