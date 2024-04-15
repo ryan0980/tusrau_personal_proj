@@ -38,13 +38,13 @@ def reward_function(params):
             reward += 1.5  # 在大角度转向时低速行驶，适当增加奖励
     else:
         if speed > 3.5:
-            reward += 2.0  # 最高速度区间，给予最高奖励
+            reward += 4.0  # 最高速度区间，给予最高奖励
         elif speed > 3.0:
-            reward += 1.5
+            reward += 2.5
         elif speed > 2.5:
-            reward += 1.0
+            reward += 1.8
         elif speed > 2.0:
-            reward += 0.5
+            reward += 1.3
         else:
             reward += 0.1
 
