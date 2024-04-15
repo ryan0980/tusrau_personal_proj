@@ -45,21 +45,21 @@ def reward_function(params):
     elif distance_from_center <= outer_radius:
         reward += 0.5  # Outer tier distance gets a lower reward
     
-    if -10<steering_angle<10:
+    if -7<steering_angle<7:
         if speed>2:
-            reward += 1.0
+            reward += 1.8
         else:
-            reward += 0.5
-    elif -20>steering_angle or 20<steering_angle:
+            reward += 1.3
+    elif -17>steering_angle or 17<steering_angle:
         if speed>2:
             reward += 0.7
         else:
             reward += 1.3
     else:
         if speed>2:
-            reward += 0.4
+            reward += 0.3
         else:
-            reward += 0.8
+            reward += 0.7
 
 
 
