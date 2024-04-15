@@ -28,7 +28,7 @@ def reward_function(params):
 
     
 
-    if not all_wheels_on_track:
+    if not all_wheels_on_track or is_crashed:
         reward = 1e-3
         return float(reward)#return 1e-3 if all_wheels_on_track is False
     
