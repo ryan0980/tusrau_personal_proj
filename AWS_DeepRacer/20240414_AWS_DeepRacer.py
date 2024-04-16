@@ -22,20 +22,20 @@ def reward_function(params):
 
     if distance_from_center <= inner_radius:
         reward += 1.0
-        reward += 2.0 if speed > 3 else 0.9
+        reward += 1.5 if speed > 3 else 0.9
     elif distance_from_center <= mid_radius:
         reward += 0.7
-        reward += 1.5 if speed > 3 else 0.6
+        reward += 1.3 if speed > 3 else 0.7
     elif distance_from_center <= outer_radius:
         reward += 0.4
-        reward += 1.0 if speed > 3 else 0.3
+        reward += 1.0 if speed > 3 else 0.5
 
     # 考虑车辆的转向角度和速度的组合
     if abs(steering_angle) > 20:
         if speed > 3:
-            reward -= 1.0  # 在大角度转向时高速行驶，大幅度减少奖励
+            reward += 1.0
         else:
-            reward += 1.5  # 在大角度转向时低速行驶，适当增加奖励
+            reward += 1.5
     else:
         if speed > 3.5:
             reward += 4.0  # 最高速度区间，给予最高奖励
