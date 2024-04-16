@@ -21,13 +21,13 @@ def reward_function(params):
     inner_radius = track_width / 8.0
 
     if distance_from_center <= inner_radius:
-        reward += 2.0
+        reward += 1.0
         reward += 2.0 if speed > 3 else 0.9
     elif distance_from_center <= mid_radius:
-        reward += 1.3
+        reward += 0.7
         reward += 1.5 if speed > 3 else 0.6
     elif distance_from_center <= outer_radius:
-        reward += 1.2
+        reward += 0.4
         reward += 1.0 if speed > 3 else 0.3
 
     # 考虑车辆的转向角度和速度的组合
